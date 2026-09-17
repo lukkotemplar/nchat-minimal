@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+file="$1"
+
+[[ -f "$file" ]] || exit 1
+
+case "${file,,}" in
+    *.vcf)
+        clear
+
+        name="$(sed -n 's/^FN[^:]*://p' "$file" | head -n1 | tr -d '\r')"
+
+        if [[ -n "$name" ]]; then
+            printf '%s\n\n' "$name"
+        fi
+
+        numbers="$(sed -n 's/^TEL[^:]*://p' "$file" | tr -d '\r')"
+
+        if [[ -n "$numbers" ]]; then
+            printf '%s\n' "$numbers"
+        else
+            printf 'No phone number found.\n'
+        fi
+
+        printf '\nPress any key to return...'
+        read -rsn1
+
+        clear
+        exit 0
+        ;;
+esac
+
+mime="$(file --brief --mime-type "$file")"
+
+case "$mime" in
+
+    image/*)
+        kitten icat --hold "$file"
+        kitten icat --clear-all
+	clear
+        ;;
+
+    video/*)
+        play "$file"
+        ;;
+
+    audio/*)
+        listen "$file"
+        ;;
+
+    application/pdf)
+        pdfterm "$file"
+	clear
+        ;;
+
+    *)
+        xdg-open "$file" >/dev/null 2>&1 &
+        ;;
+esac

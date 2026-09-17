@@ -42,6 +42,33 @@ nchat, including:
 
 Python is NOT required by this build.
 
+## Optional attachment support
+
+The repository includes:
+
+- `scripts/nchat-open` — attachment dispatcher
+- `scripts/play` — video wrapper for mpv
+- `scripts/listen` — audio wrapper for mpv
+
+These scripts are optional and are not required for nchat itself.
+
+Optional dependencies:
+
+- `kitty` — inline image viewing with `kitten icat`
+- `mpv` — audio and video playback
+- `pdfterm` — PDF viewing in the terminal
+- `xdg-utils` — fallback opener for unsupported file types
+
+Install the helpers with:
+
+    mkdir -p ~/.local/bin
+    cp scripts/nchat-open scripts/play scripts/listen ~/.local/bin/
+    chmod +x ~/.local/bin/nchat-open ~/.local/bin/play ~/.local/bin/listen
+
+Then configure nchat to use nchat-open in $XDG_CONFIG_HOME/nchat/ui.conf, adding or editing this line: 
+
+attachment_open_command=~/.local/bin/nchat-open "%1"
+
 ## Build
 
 Clone nchat v5.18.20:
